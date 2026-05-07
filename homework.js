@@ -253,6 +253,10 @@ const OrderService = {
    */
   async fetchOrders() {
     // 請實作此函式
+    const response = await axios.get(`${this.baseURL}/api/livejs/v1/admin/${this.apiPath}/orders`, {
+      headers: { authorization: this.token }
+    });
+    return response.data.orders;
   },
 
   /**
@@ -262,6 +266,12 @@ const OrderService = {
    */
   formatOrders(orders) {
     // 請實作此函式
+    return orders.map(order => {
+      return {
+        ...order,
+        formattedDate: dayjs.unix(order.createdAt).format('YYYY/MM/DD HH:mm')
+      }
+    })
   },
 
   /**
@@ -271,6 +281,7 @@ const OrderService = {
    */
   filterUnpaidOrders(orders) {
     // 請實作此函式
+    return orders.filter(order => !order.paid);
   },
 
   /**
@@ -386,12 +397,37 @@ if (require.main === module) {
       // }
 
       //4-3
-      try {
-        const result = await getOrdersWithAxios();
-        console.log('getOrdersWithAxios:', result);
-      } catch (error) {
-        console.log('getOrdersWithAxios 錯誤:', error.message);
-      }
+      // try {
+      //   const result = await getOrdersWithAxios();
+      //   console.log('getOrdersWithAxios:', result);
+      // } catch (error) {
+      //   console.log('getOrdersWithAxios 錯誤:', error.message);
+      // }
+
+      console.log('\n--- 任務五 ---');
+      //5-1
+      // try {
+      //   const result = await OrderService.fetchOrders();
+      //   console.log('fetchOrders:', result);
+      // } catch (error) {
+      //   console.log('fetchOrders 錯誤:', error.message);
+      // }
+
+      //5-2
+      // try {
+      //   const result = await OrderService.formatOrders(testOrders);
+      //   console.log('formatOrders:', result);
+      // } catch (error) {
+      //   console.log('formatOrders 錯誤:', error.message);
+      // }
+
+      //5-3
+      // try {
+      //   const result = await OrderService.filterUnpaidOrders(testOrders);
+      //   console.log('filterUnpaidOrders:', result);
+      // } catch (error) {
+      //   console.log('filterUnpaidOrders 錯誤:', error.message);
+      // }
 
     } else {
       console.log('\n--- 任務四：請先在 .env 設定 API_PATH ---');
